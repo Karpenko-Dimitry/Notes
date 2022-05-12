@@ -8,7 +8,7 @@ use App\Http\Requests\User\StoreAvatarRequest;
 use App\Http\Resources\UserResource;
 use App\Mail\UserRegistered;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,8 +38,8 @@ class UsersController extends Controller
     /**
      * @return UserResource
      */
-    public function profile() {
-
+    public function profile(): UserResource
+    {
         return new UserResource(Auth::user());
     }
 

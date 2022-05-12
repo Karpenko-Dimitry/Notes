@@ -30,7 +30,7 @@ class NotesController extends Controller
             'per_page' => $request->get('per_page') ?? '5',
             'grid_notes' => $request->get('grid_notes') ?? false,
             'category' => explode(',', $request->get('category')) ?? [],
-            'tag' => $request->get('tag') ?? false,
+            'tag' => explode(',', $request->get('tag')) ?? [],
             'query' => $request->get('query') ?? '',
         ];
 
@@ -41,10 +41,12 @@ class NotesController extends Controller
                 $builder->where('title', 'LIKE', "%$query%");
                 $builder->orWhere('content', 'LIKE', "%$query%");
             });
-            $builder->whereHas('tags', function (Builder $builder) use($filter) {
-                $tag = Tag::where('name', $filter['tag'])->first();
-                if ($filter['tag']) {
-                    $builder->where('tag_id', $tag->id);
+            $tags = $filter['tag'];
+            $builder->whereHas('tags', function (Builder $builder) use($tags) {
+                foreach ($tags as $key => $id) {
+                    if ($id != null) {
+                        $key === 0 ? $builder->where('tag_id', $id) : $builder->orWhere('tag_id', $id);
+                    }
                 }
             });
             $categories = $filter['category'];

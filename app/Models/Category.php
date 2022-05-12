@@ -17,20 +17,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\Models\CategoryTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CategoryTranslation[] $translations
  * @property-read int|null $translations_count
- * @method static \Illuminate\Database\Eloquent\Builder|Category listsTranslations($translationField)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Category notTranslatedIn($locale = null)
- * @method static \Illuminate\Database\Eloquent\Builder|Category orWhereTranslation($translationField, $value, $locale = null)
- * @method static \Illuminate\Database\Eloquent\Builder|Category orWhereTranslationLike($translationField, $value, $locale = null)
- * @method static \Illuminate\Database\Eloquent\Builder|Category orderByTranslation($translationField, $sortMethod = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|Category notTranslatedIn(?string $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category orWhereTranslation(string $translationField, $value, ?string $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category orWhereTranslationLike(string $translationField, $value, ?string $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category orderByTranslation(string $translationField, string $sortMethod = 'asc')
  * @method static \Illuminate\Database\Eloquent\Builder|Category query()
  * @method static \Illuminate\Database\Eloquent\Builder|Category translated()
- * @method static \Illuminate\Database\Eloquent\Builder|Category translatedIn($locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category translatedIn(?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Category whereTranslation($translationField, $value, $locale = null, $method = 'whereHas', $operator = '=')
- * @method static \Illuminate\Database\Eloquent\Builder|Category whereTranslationLike($translationField, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereTranslation(string $translationField, $value, ?string $locale = null, string $method = 'whereHas', string $operator = '=')
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category withTranslation()
  * @mixin \Eloquent

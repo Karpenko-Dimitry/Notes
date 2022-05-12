@@ -1,6 +1,7 @@
 <?php
 
 use \Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;

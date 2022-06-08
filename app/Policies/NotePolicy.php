@@ -51,7 +51,6 @@ class NotePolicy
      */
     public function update(User $user, Note $note)
     {
-
         return $user && $note->user_id === $user->id;
     }
 

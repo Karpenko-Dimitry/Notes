@@ -18,6 +18,10 @@ class FileResource extends JsonResource
      */
     public function toArray($request)
     {
-        return $this->resource->only(['id', 'path']);
+        /** @var File $file */
+        $file = $this->resource;
+        return array_merge($this->resource->only(['id', 'path']), [
+            'name' => $file->original_name . '.' . $file->ext,
+        ]);
     }
 }

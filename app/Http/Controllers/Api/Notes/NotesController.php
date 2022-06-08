@@ -27,10 +27,11 @@ class NotesController extends Controller
     public function index(IndexNotesRequest $request)
     {
         $filter = [
+            'user_id' => $request->get('user_id'),
             'per_page' => $request->get('per_page') ?? '5',
             'grid_notes' => $request->get('grid_notes') ?? false,
-            'category' => explode(',', $request->get('category')) ?? [],
-            'tag' => explode(',', $request->get('tag')) ?? [],
+            'category' => $request->get('category') ? explode(',', $request->get('category')) : [],
+            'tag' => $request->get('tag') ? explode(',', $request->get('tag')) : [],
             'query' => $request->get('query') ?? '',
         ];
 
@@ -42,32 +43,29 @@ class NotesController extends Controller
                 $builder->orWhere('content', 'LIKE', "%$query%");
             });
             $tags = $filter['tag'];
-            $builder->whereHas('tags', function (Builder $builder) use($tags) {
-                foreach ($tags as $key => $id) {
-                    if ($id != null) {
-                        $key === 0 ? $builder->where('tag_id', $id) : $builder->orWhere('tag_id', $id);
-                    }
-                }
-            });
-            $categories = $filter['category'];
-            $builder->whereHas('categories', function (Builder $builder) use($categories) {
-                foreach ($categories as $key => $id) {
-                    if ($id != null) {
-                        $key === 0 ? $builder->where('category_id', $id) : $builder->orWhere('category_id', $id);
-                    }
-                }
-            });
 
+            if ($user = $filter['user_id']) {
+                $builder->where('user_id', $user);
+            }
+
+            if (count($tags)) {
+                $builder->whereHas('tags', function (Builder $builder) use($tags) {
+                    $builder->whereIn('tag_id', $tags);
+                });
+            }
+
+            $categories = $filter['category'];
+            if (count($categories)) {
+                $builder->whereHas('categories', function (Builder $builder) use($categories) {
+                    $builder->whereIn('category_id', $categories);
+                });
+            }
         })->orderByDesc('id')->paginate($filter['per_page']);
 
         return NoteResource::collection($notes);
     }
 
-    /**
-     * @param StoreNoteRequest $request
-     * @return NoteResource
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
+
     public function store(StoreNoteRequest $request)
     {
         $this->authorize('create', Note::class);
@@ -84,14 +82,14 @@ class NotesController extends Controller
 
         $note->categories()->attach($request->post('category'));
 
-        foreach ($request->post('files') as $id){
-            if(File::find($id)){
-                File::find($id)->update(['note_id' => $note->id]);
+        foreach ($request->post('files', []) as $id){
+            if ($file = File::find($id)){
+                $file->update(['note_id' => $note->id]);
             }
         }
 
         if ($note && $request->file('user_file')) {
-            foreach ($request->file('user_file') as $file) {
+            foreach ($request->file('user_file', []) as $file) {
                 if (is_uploaded_file($file)) {
                     $path = $file->storePublicly('public');
                     $note->files()->create(['path' => $path]);
@@ -100,7 +98,7 @@ class NotesController extends Controller
         }
 
         if ($note && $request->input('tags')) {
-            foreach ($request->input('tags') as $tagName) {
+            foreach ($request->input('tags', []) as $tagName) {
 
                 $tag = Tag::where('name', $tagName)->first();
 

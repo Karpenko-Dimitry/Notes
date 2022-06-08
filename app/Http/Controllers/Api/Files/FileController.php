@@ -27,11 +27,13 @@ class FileController extends Controller
     }
 
     public function store(Request $request) {
-        $file = $request->file('user_file');
+        $file = $request->file('user_file')[0];
 
         if ($file && is_uploaded_file($file)) {
+            $original_name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $ext = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
             $path = $file->storePublicly('public');
-            $file = File::create(['path' => $path]);
+            $file = File::create(compact('path', 'original_name', 'ext'));
         }
 
         return new FileResource($file);
@@ -39,7 +41,7 @@ class FileController extends Controller
 
     /**
      * @param File $file
-     * @return Application|ResponseFactory|Response
+     * @return \Illuminate\Http\JsonResponse
      * @throws Exception
      */
     public function destroy(File $file) {
@@ -48,7 +50,7 @@ class FileController extends Controller
 
         $file->delete();
 
-        return response([], 200);
+        return response()->json(['message' => 'success']);
     }
 }
 

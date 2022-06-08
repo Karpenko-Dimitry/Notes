@@ -58,6 +58,7 @@ Route::group([
         Route::post('/notes/{notes_uid_api}/send', [\App\Http\Controllers\Api\Notes\NotesController::class, 'share']);
 
         Route::get('/users/profile', [\App\Http\Controllers\Api\Users\UsersController::class, 'profile']);
+        Route::patch('/users/profile', [\App\Http\Controllers\Api\Users\UsersController::class, 'update']);
         Route::post('/user/{user}/avatar', [\App\Http\Controllers\Api\Users\UsersController::class, 'storeAvatar']);
 
         Route::resource('users.notes', \App\Http\Controllers\Api\Users\NotesController::class, [

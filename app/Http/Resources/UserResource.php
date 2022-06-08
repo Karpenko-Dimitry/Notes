@@ -21,9 +21,10 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            $this->resource->only(['id', 'name']),
+            $this->resource->only(['id', 'name', 'email']),
             [
                 'avatar' => avatarPath($this->resource->avatar),
+                'row_avatar' => $this->resource->avatar,
                 'created_at' => format_datetime_locale($this->resource->created_at),
             ]
         );

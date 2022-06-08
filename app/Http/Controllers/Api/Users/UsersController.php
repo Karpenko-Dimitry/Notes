@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\StoreAvatarRequest;
 use App\Http\Resources\UserResource;
 use App\Mail\UserRegistered;
@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Storage;
 class UsersController extends Controller
 {
     /**
-     * @param CreateUserRequest $request
+     * @param UpdateUserRequest $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function store(CreateUserRequest $request)
+    public function store(UpdateUserRequest $request)
     {
         $user = User::create(array_merge($request->only(['name','email']),
             ['password' => bcrypt($request->post('password'))]));
@@ -33,6 +33,23 @@ class UsersController extends Controller
             'user' => new UserResource($user),
             'access_token' => $token
         ], 200);
+    }
+
+    /**
+     * @param UpdateUserRequest $request
+     * @return UserResource
+     */
+    public function update(UpdateUserRequest $request)
+    {
+        /** @var User $user */
+        $user = auth('api')->user();
+        $user->update(array_merge($request->only(['name','email', 'avatar'])));
+
+//        Mail::mailer('rmind')
+//            ->to($request->post('email'))
+//            ->send(new UserRegistered($user));
+
+        return new UserResource($user);
     }
 
     /**

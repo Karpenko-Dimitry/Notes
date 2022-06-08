@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\StoreAvatarRequest;
 use App\Mail\UserRegistered;
 use App\Models\User;
@@ -24,10 +24,10 @@ class UserController extends Controller
     }
 
     /**
-     * @param CreateUserRequest $request
+     * @param UpdateUserRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreateUserRequest $request)
+    public function store(UpdateUserRequest $request)
     {
         $user = User::create($request
                 ->all([

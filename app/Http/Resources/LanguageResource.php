@@ -13,7 +13,7 @@ class LanguageResource extends JsonResource
     public function toArray($request)
     {
         return $this->resource->only([
-            'type',
+            'type', 'id'
         ]);
     }
 }

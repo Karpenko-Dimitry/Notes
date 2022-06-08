@@ -30,6 +30,8 @@ class NoteResource extends JsonResource
             'files' => FileResource::collection($this->resource->files),
             'translation' => $this->resource->getTranslationsArray(),
             'tags' => TagResource::collection($this->resource->tags),
+            'can_edit' => auth('api')->user() && auth('api')->user()->can('update', $this->resource),
+            'can_delete' => auth('api')->user() && auth('api')->user()->can('delete', $this->resource),
         ]);
     }
 }
